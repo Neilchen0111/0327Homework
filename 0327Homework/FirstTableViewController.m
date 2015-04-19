@@ -9,40 +9,32 @@
 #import "FirstTableViewController.h"
 #import "Feed.h"
 #import "FirstTableViewCell.h"
+#import "ACWebViewController.h"
+
 
 @interface FirstTableViewController ()
 
-@property (nonatomic, strong) NSMutableArray *classArray;
+@property (strong,nonatomic) NSMutableArray *messageArray;
+@property  (strong,nonatomic)NSIndexPath *selectedIndex;
 
 @end
 
 @implementation FirstTableViewController
 
+-(void)awakeFromNib{
+    _messageArray = [[NSMutableArray alloc]init];
+}
+
 - (void)viewDidLoad {
+    
     [super viewDidLoad];
+
     
-    _classArray = [[NSMutableArray alloc]init];
-    
-    Feed *firstData = [[Feed alloc] init];
-    firstData.className = @"App 開發神器";
-    firstData.date = @"2015-0407 10:00am";
-    firstData.classContent = @"如何藉由開發神器來幫助開發者進行開發，在這個課程當中我們可以學到相關項目，敬請期待。";
-    firstData.classImage = @"Dog1";
-    firstData.enter = @"了解更多";
-    
-    [_classArray addObject:firstData];
+    [self prepareAPIcall];
     
     
-    Feed *secondData = [[Feed alloc] init];
-    secondData.className = @"寵物App 開發";
-    secondData.date = @"2015-0410 15:00am";
-    secondData.classContent = @"了解寵物市場的內容，透過專業人士的指導，讓你開發寵物類app快速上手。";
-    secondData.classImage = @"Dog2";
-    secondData.enter = @"了解更多2";
-    
-    [_classArray addObject:secondData];
-    
-    
+   
+
     
     
     
@@ -69,72 +61,92 @@
 - (NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section {
 
     // Return the number of rows in the section.
-    return _classArray.count;
+    return _messageArray.count;
 }
-
 
 - (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath {
    FirstTableViewCell *cell = [tableView dequeueReusableCellWithIdentifier:@"firstcell" forIndexPath:indexPath];
-    Feed *currentFeed = [_classArray objectAtIndex:indexPath.row];
+    Feed *currentFeed = [_messageArray objectAtIndex:indexPath.row];
     
-    cell.classNameLabel.text = currentFeed.className;
+     [cell.enterButton addTarget:self action:@selector(checkButtonTapped:) forControlEvents:UIControlEventTouchUpInside];
     
-    cell.dateLabel.text = currentFeed.date;
-    cell.classContentLabel.text = currentFeed.classContent;
-    cell.imageView.image= [UIImage imageNamed:currentFeed.classImage];
-    cell.imageView.frame = CGRectMake(0, 0, 100, 100);
-    cell.imageView.backgroundColor = [UIColor redColor];
+    cell.URLURLname = currentFeed.enterURL;
+    cell.classNameLabel.text = currentFeed.classname;
+    cell.dateLabel.text = currentFeed.classdate;
+    cell.classContentLabel.text = currentFeed.content;
+    
+    __block FirstTableViewCell *__cell = cell;
+    cell.classImageView.image = nil;
+    [currentFeed.avatarImage getDataInBackgroundWithBlock:^(NSData *data, NSError *error) {
+        // Convert data into image.
+        UIImage *avatar = [UIImage imageWithData:data];
+        // Put image into image view.
+        __cell.classImageView.image= avatar;
+    }];
+//    cell.classImageView.image= [UIImage imageNamed:currentFeed.classImage];
 
-     [cell.enterButton setTitle:currentFeed.enter forState:UIControlStateNormal];
-    
 
     
+
+
     return cell;
 }
 
-
-/*
-// Override to support conditional editing of the table view.
-- (BOOL)tableView:(UITableView *)tableView canEditRowAtIndexPath:(NSIndexPath *)indexPath {
-    // Return NO if you do not want the specified item to be editable.
-    return YES;
+-(void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath{
+    
+    _selectedIndex = indexPath;
 }
-*/
 
-/*
-// Override to support editing the table view.
-- (void)tableView:(UITableView *)tableView commitEditingStyle:(UITableViewCellEditingStyle)editingStyle forRowAtIndexPath:(NSIndexPath *)indexPath {
-    if (editingStyle == UITableViewCellEditingStyleDelete) {
-        // Delete the row from the data source
-        [tableView deleteRowsAtIndexPaths:@[indexPath] withRowAnimation:UITableViewRowAnimationFade];
-    } else if (editingStyle == UITableViewCellEditingStyleInsert) {
-        // Create a new instance of the appropriate class, insert it into the array, and add a new row to the table view
-    }   
+#pragma private
+
+-(void)prepareAPIcall{
+    
+    
+    // Step 1.0 Prepare class to query
+    PFQuery *query = [Feed query];
+ 
+    // Step 2. Start api call
+    [query findObjectsInBackgroundWithBlock:^(NSArray *objects, NSError *error) {
+        // Step 3. Return object
+        if (!error) {
+            
+            // Remove all previous data.
+            [_messageArray removeAllObjects];
+            
+            // Add all data into message array.
+            [_messageArray addObjectsFromArray:objects];
+            
+            // Reload Table View.
+            [self.tableView reloadSections:[NSIndexSet indexSetWithIndex:0] withRowAnimation:UITableViewRowAnimationAutomatic];
+        }
+    }
+     ];
 }
-*/
 
-/*
-// Override to support rearranging the table view.
-- (void)tableView:(UITableView *)tableView moveRowAtIndexPath:(NSIndexPath *)fromIndexPath toIndexPath:(NSIndexPath *)toIndexPath {
-}
-*/
 
-/*
-// Override to support conditional rearranging of the table view.
-- (BOOL)tableView:(UITableView *)tableView canMoveRowAtIndexPath:(NSIndexPath *)indexPath {
-    // Return NO if you do not want the item to be re-orderable.
-    return YES;
-}
-*/
-
-/*
-#pragma mark - Navigation
-
-// In a storyboard-based application, you will often want to do a little preparation before navigation
 - (void)prepareForSegue:(UIStoryboardSegue *)segue sender:(id)sender {
-    // Get the new view controller using [segue destinationViewController].
-    // Pass the selected object to the new view controller.
+
+    
+    if ([segue.identifier isEqualToString:@"toURLsegue"]) {
+        
+       
+        NSDictionary *currentData = [_messageArray objectAtIndex:_selectedIndex];
+    
+        ACWebViewController *destViewController = segue.destinationViewController;
+        destViewController.urlName = currentData;
+    }
 }
-*/
+
+- (void)checkButtonTapped:(id)sender
+{
+    CGPoint buttonPosition = [sender convertPoint:CGPointZero toView:self.tableView];
+    NSIndexPath *indexPath = [self.tableView indexPathForRowAtPoint:buttonPosition];
+    if (indexPath != nil)
+    {
+        UIButton *button = (UIButton *)sender;
+       int x = button.tag;
+    }
+}
+
 
 @end

@@ -10,4 +10,8 @@
 
 @implementation Feed
 
++ (NSString *)parseClassName {
+    return @"classdata";
+}
+
 @end

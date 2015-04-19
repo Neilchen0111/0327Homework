@@ -16,5 +16,6 @@
 @property(strong,nonatomic)IBOutlet UILabel *classContentLabel;
 @property(strong,nonatomic)IBOutlet UIButton *enterButton;
 @property(strong,nonatomic)IBOutlet UIImageView *classImageView;
+@property (strong,nonatomic) NSString *URLURLname;
 
 @end

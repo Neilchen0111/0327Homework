@@ -7,13 +7,16 @@
 //
 
 #import <Foundation/Foundation.h>
+#import <Parse/Parse.h>
 
-@interface Feed : NSObject
 
-@property(strong,nonatomic)NSString *className;
-@property(strong,nonatomic)NSString *date;
-@property(strong,nonatomic)NSString *classContent;
-@property(strong,nonatomic)NSString *enter;
-@property(strong,nonatomic)NSString *classImage;
+@interface Feed : PFObject<PFSubclassing>
+
+@property(strong,nonatomic)NSString *classname;
+@property(strong,nonatomic)NSString *classdate;
+@property(strong,nonatomic)NSString *content;
+@property(strong,nonatomic)NSString *enterURL;
+@property(strong,nonatomic)PFFile *avatarImage;
+
 
 @end

@@ -7,6 +7,9 @@
 //
 
 #import "AppDelegate.h"
+#import <Parse/Parse.h>
+#import "Feed.h"
+
 
 @interface AppDelegate ()
 
@@ -16,6 +19,14 @@
 
 
 - (BOOL)application:(UIApplication *)application didFinishLaunchingWithOptions:(NSDictionary *)launchOptions {
+    
+    [Parse setApplicationId:@"zyHhCKoVl05KQVKAD0KSjbFmotCLih5xh7ZlwpN3"
+                  clientKey:@"5ZU9lz5H84atHzv9zryYpFNKGlai50fwUXmik6hO"];
+    
+    [PFAnalytics trackAppOpenedWithLaunchOptions:launchOptions];
+    
+    [Feed registerSubclass];
+    
     // Override point for customization after application launch.
     return YES;
 }

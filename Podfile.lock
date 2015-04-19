@@ -1,0 +1,48 @@
+PODS:
+  - AFNetworking (2.5.2):
+    - AFNetworking/NSURLConnection (= 2.5.2)
+    - AFNetworking/NSURLSession (= 2.5.2)
+    - AFNetworking/Reachability (= 2.5.2)
+    - AFNetworking/Security (= 2.5.2)
+    - AFNetworking/Serialization (= 2.5.2)
+    - AFNetworking/UIKit (= 2.5.2)
+  - AFNetworking/NSURLConnection (2.5.2):
+    - AFNetworking/Reachability
+    - AFNetworking/Security
+    - AFNetworking/Serialization
+  - AFNetworking/NSURLSession (2.5.2):
+    - AFNetworking/Reachability
+    - AFNetworking/Security
+    - AFNetworking/Serialization
+  - AFNetworking/Reachability (2.5.2)
+  - AFNetworking/Security (2.5.2)
+  - AFNetworking/Serialization (2.5.2)
+  - AFNetworking/UIKit (2.5.2):
+    - AFNetworking/NSURLConnection
+    - AFNetworking/NSURLSession
+  - Bolts (1.1.4)
+  - Facebook-iOS-SDK (3.23.2):
+    - Bolts (~> 1.0)
+  - Parse-iOS-SDK (1.2.21):
+    - Bolts
+    - Facebook-iOS-SDK (~> 3.7)
+  - Parse-SDK-Helpers (1.1.0):
+    - Parse-iOS-SDK (~> 1.2.19)
+    - Parse-OSX-SDK (~> 1.2.18)
+    - Parse-SDK-Helpers/Core (= 1.1.0)
+  - Parse-SDK-Helpers/Core (1.1.0):
+    - Parse-iOS-SDK (~> 1.2.19)
+    - Parse-OSX-SDK (~> 1.2.18)
+
+DEPENDENCIES:
+  - AFNetworking (~> 2.5)
+  - Parse-SDK-Helpers (~> 1.1.0)
+
+SPEC CHECKSUMS:
+  AFNetworking: fefbce9660acb17f48ae0011292d4da0f457bf36
+  Bolts: f8e2f94edbf9fec7bb8de5ecaaa3aa6b7de6f64e
+  Facebook-iOS-SDK: cd87f0b2f0c1d9574b44e8fa2baacc275524bac3
+  Parse-iOS-SDK: bd881681f8633d75f33fb6f3d5d52d19403c49cf
+  Parse-SDK-Helpers: 6bdc7664b0471db4449b35079bfdd3d351b67456
+
+COCOAPODS: 0.36.3
